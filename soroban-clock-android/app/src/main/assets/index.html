@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-skin="wood">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ساعة السوروبان</title>
+<style>
+  *{ box-sizing: border-box; }
+
+  /* ============ السمات (الثيمات) ============ */
+  :root, :root[data-skin="wood"]{
+    color-scheme: dark;
+    --page-bg: radial-gradient(circle at 50% 25%, #2b211a 0%, #130e0a 55%, #050302 100%);
+    --page-solid: #130e0a;
+    --text: #e9d6b8;
+    --title: #c9a06a;
+    --title-glow: 0 0 20px rgba(230,160,60,.3);
+    --digital: #a88556;
+
+    --frame-bg:
+      linear-gradient(180deg, rgba(255,220,170,.16), rgba(0,0,0,0) 42%),
+      linear-gradient(180deg, #7d4b23 0%, #5b3316 45%, #42220e 100%);
+    --frame-bw: 0px;
+    --frame-edge: transparent;
+    --frame-radius: 20px;
+    --frame-shadow:
+      inset 0 0 0 2px rgba(255,205,130,.12),
+      inset 0 2px 0 rgba(255,225,180,.25),
+      0 20px 45px -14px rgba(0,0,0,.95),
+      0 0 70px rgba(220,140,40,.10);
+
+    --rod: linear-gradient(180deg, #e2c08f, #9a7040);
+    --beam-bg: linear-gradient(180deg, #8a5a28, #4a2a10 60%, #35200c);
+    --beam-shadow: 0 3px 8px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,210,150,.35);
+
+    --bead-c: #df9a3a;
+    --bead-radius: 50%;
+    --shine: radial-gradient(ellipse at 32% 26%, rgba(255,255,255,.75), rgba(255,255,255,0) 45%);
+    --bead-shadow:
+      inset 0 2px 2px rgba(255,255,255,.5),
+      inset 0 -3px 6px rgba(0,0,0,.5),
+      0 3px 6px rgba(0,0,0,.55);
+
+    --dot: #ffc861;
+    --dot-glow: 0 0 10px 2px rgba(255,170,50,.7);
+
+    --ui-bg: rgba(255,230,190,.06);
+    --ui-border: rgba(255,210,150,.18);
+    --ui-text: #d8c0a0;
+    --ui-active: #ffc861;
+  }
+
+  /* ألوان المدرسة: مستوحاة من السوروبان البلاستيكي الملوّن */
+  :root[data-skin="kids"]{
+    color-scheme: light;
+    --page-bg: linear-gradient(180deg, #f9fbfd 0%, #e4e9f0 100%);
+    --page-solid: #eef2f6;
+    --text: #2b2f36;
+    --title: #2f3a4a;
+    --title-glow: none;
+    --digital: #5a6575;
+
+    --frame-bg: linear-gradient(180deg, #ffffff 0%, #eceef1 100%);
+    --frame-bw: clamp(8px, 1.6vw, 12px);
+    --frame-edge: #2c2d31;
+    --frame-radius: 16px;
+    --frame-shadow:
+      inset 0 4px 10px rgba(0,0,0,.18),
+      0 0 0 1px #111,
+      0 22px 40px -18px rgba(20,30,50,.55);
+
+    --rod: linear-gradient(90deg, #c08648, #f3cc96 50%, #c08648);
+    --beam-bg: linear-gradient(180deg, #ffffff 0%, #cfd3d8 45%, #8e939a 100%);
+    --beam-shadow: 0 2px 4px rgba(0,0,0,.35), inset 0 1px 0 #fff;
+
+    --heaven-c: #2f7de1;
+    --e0-c: #22b04c;
+    --e1-c: #ffd400;
+    --e2-c: #ff8a1a;
+    --e3-c: #ec2a23;
+    --bead-radius: 44% / 50%;
+    --shine: radial-gradient(ellipse at 35% 22%, rgba(255,255,255,.7), rgba(255,255,255,0) 30%);
+    --bead-shadow: 0 2px 3px rgba(0,0,0,.35);
+
+    --dot: #ec2a23;
+    --dot-glow: none;
+
+    --ui-bg: #ffffff;
+    --ui-border: #d3d9e1;
+    --ui-text: #2b2f36;
+    --ui-active: #2f7de1;
+  }
+
+  /* أبنوس وعاج: إطار ياباني مطليّ بالورنيش وخرز عاجي */
+  :root[data-skin="ebony"]{
+    color-scheme: dark;
+    --page-bg: radial-gradient(circle at 50% 30%, #241a1b 0%, #0d0909 60%, #000 100%);
+    --page-solid: #0d0909;
+    --text: #e8dcc4;
+    --title: #d9b77a;
+    --title-glow: 0 0 18px rgba(217,183,122,.25);
+    --digital: #9c8661;
+
+    --frame-bg:
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 38%),
+      linear-gradient(180deg, #2a1e1c 0%, #120c0b 100%);
+    --frame-bw: 4px;
+    --frame-edge: #7a1d18;
+    --frame-radius: 8px;
+    --frame-shadow:
+      inset 0 0 0 1px rgba(217,183,122,.35),
+      0 24px 50px -16px rgba(0,0,0,1);
+
+    --rod: linear-gradient(90deg, #8a7a4c, #e0d09c 50%, #8a7a4c);
+    --beam-bg: linear-gradient(180deg, #3b2b27, #120b0a);
+    --beam-shadow: 0 3px 8px rgba(0,0,0,.8), inset 0 1px 0 rgba(217,183,122,.6);
+
+    --bead-c: #e6d8bc;
+    --bead-radius: 50%;
+    --shine: radial-gradient(ellipse at 30% 25%, rgba(255,255,255,.85), rgba(255,255,255,0) 40%);
+    --bead-shadow: inset 0 -3px 5px rgba(80,50,20,.45), 0 3px 6px rgba(0,0,0,.7);
+
+    --dot: #d9b77a;
+    --dot-glow: 0 0 8px rgba(217,183,122,.6);
+
+    --ui-bg: rgba(232,220,196,.05);
+    --ui-border: rgba(217,183,122,.25);
+    --ui-text: #d8c9a8;
+    --ui-active: #d9b77a;
+  }
+
+  /* نيون */
+  :root[data-skin="neon"]{
+    color-scheme: dark;
+    --page-bg: radial-gradient(circle at 50% 35%, #1a0f3a 0%, #070414 55%, #020108 100%);
+    --page-solid: #070414;
+    --text: #d6f6ff;
+    --title: #7ef3ff;
+    --title-glow: 0 0 14px rgba(0,229,255,.8);
+    --digital: #ff7ae6;
+
+    --frame-bg: linear-gradient(180deg, rgba(22,26,64,.92), rgba(8,8,26,.96));
+    --frame-bw: 1.5px;
+    --frame-edge: rgba(0,229,255,.55);
+    --frame-radius: 18px;
+    --frame-shadow:
+      0 0 30px rgba(0,229,255,.25),
+      inset 0 0 30px rgba(0,229,255,.08);
+
+    --rod: linear-gradient(180deg, rgba(0,229,255,.45), rgba(255,43,214,.45));
+    --beam-bg: linear-gradient(90deg, #ff2bd6, #00e5ff);
+    --beam-shadow: 0 0 12px rgba(255,43,214,.7), 0 0 20px rgba(0,229,255,.5);
+
+    --bead-c: #00e5ff;
+    --heaven-c: #ff2bd6;
+    --bead-radius: 50%;
+    --shine: radial-gradient(ellipse at 32% 26%, rgba(255,255,255,.6), rgba(255,255,255,0) 40%);
+
+    --dot: #ff2bd6;
+    --dot-glow: 0 0 10px 3px rgba(255,43,214,.8);
+
+    --ui-bg: rgba(0,229,255,.05);
+    --ui-border: rgba(0,229,255,.3);
+    --ui-text: #bfefff;
+    --ui-active: #00e5ff;
+  }
+
+  /* بسيط فاتح: الخرز المحسوب فقط يتلوّن */
+  :root[data-skin="minimal"]{
+    color-scheme: light;
+    --page-bg: #eceff1;
+    --page-solid: #eceff1;
+    --text: #22262b;
+    --title: #22262b;
+    --title-glow: none;
+    --digital: #6b7480;
+
+    --frame-bg: #fbfcfd;
+    --frame-bw: 1px;
+    --frame-edge: #cfd5db;
+    --frame-radius: 6px;
+    --frame-shadow: 0 14px 30px -18px rgba(30,40,50,.45);
+
+    --rod: #b7bec6;
+    --beam-bg: #22262b;
+    --beam-shadow: none;
+
+    --bead-c: #c9cfd6;
+    --bead-on-c: #1f6feb;
+    --bead-radius: 50%;
+    --shine: linear-gradient(transparent, transparent);
+    --bead-shadow: inset 0 -2px 0 rgba(0,0,0,.12);
+
+    --dot: #1f6feb;
+    --dot-glow: none;
+
+    --ui-bg: #ffffff;
+    --ui-border: #cfd5db;
+    --ui-text: #22262b;
+    --ui-active: #1f6feb;
+  }
+
+  /* يشم وذهب */
+  :root[data-skin="jade"]{
+    color-scheme: dark;
+    --page-bg: radial-gradient(circle at 50% 30%, #12352a 0%, #06170f 60%, #020a06 100%);
+    --page-solid: #06170f;
+    --text: #dff3e8;
+    --title: #e2c06e;
+    --title-glow: 0 0 18px rgba(226,192,110,.3);
+    --digital: #9fc9b2;
+
+    --frame-bg:
+      linear-gradient(180deg, rgba(255,230,180,.1), rgba(0,0,0,0) 40%),
+      linear-gradient(180deg, #3d2615 0%, #1f130a 100%);
+    --frame-bw: 2px;
+    --frame-edge: #b8913f;
+    --frame-radius: 14px;
+    --frame-shadow:
+      inset 0 0 0 1px rgba(255,220,140,.15),
+      0 22px 46px -16px rgba(0,0,0,.95),
+      0 0 60px rgba(60,200,140,.08);
+
+    --rod: linear-gradient(90deg, #9c7a2c, #f2d68a 50%, #9c7a2c);
+    --beam-bg: linear-gradient(180deg, #f2d68a, #b8913f 55%, #7a5c1f);
+    --beam-shadow: 0 3px 8px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,245,210,.8);
+
+    --bead-c: #2fa37a;
+    --bead-radius: 50%;
+    --shine: radial-gradient(ellipse at 32% 26%, rgba(255,255,255,.7), rgba(255,255,255,0) 42%);
+    --bead-shadow:
+      inset 0 2px 3px rgba(255,255,255,.35),
+      inset 0 -3px 6px rgba(0,40,20,.55),
+      0 3px 6px rgba(0,0,0,.6);
+
+    --dot: #e2c06e;
+    --dot-glow: 0 0 8px rgba(226,192,110,.7);
+
+    --ui-bg: rgba(226,192,110,.06);
+    --ui-border: rgba(226,192,110,.25);
+    --ui-text: #d9ecdf;
+    --ui-active: #e2c06e;
+  }
+
+  /* ============ الصفحة ============ */
+  :root{
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--page-solid);
+  }
+  html{ height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body{
+    margin: 0;
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background: var(--page-bg);
+    color: var(--text);
+    font-family: system-ui, "Segoe UI", Tahoma, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: color .4s;
+  }
+
+  .wrap{ display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+
+  .title{
+    margin: 0;
+    font-size: clamp(15px, 2.4vw, 20px);
+    font-weight: 600;
+    color: var(--title);
+    text-shadow: var(--title-glow);
+  }
+
+  /* ============ اختيار السمة ============ */
+  .skins{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 640px;
+  }
+  .skin-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--ui-border);
+    background: var(--ui-bg);
+    color: var(--ui-text);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .skin-btn:hover{ border-color: var(--ui-active); }
+  .skin-btn:focus-visible{ outline: 2px solid var(--ui-active); outline-offset: 2px; }
+  .skin-btn[aria-checked="true"]{
+    border-color: var(--ui-active);
+    box-shadow: 0 0 0 1px var(--ui-active);
+    font-weight: 600;
+  }
+  .swatch{
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+  }
+  .swatch i{
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  /* ============ الإطار ============ */
+  .frame{
+    --bead-w: clamp(30px, 6.6vw, 46px);
+    --bead-h: clamp(15px, 3.4vw, 24px);
+    --travel: clamp(9px, 2.2vw, 16px);
+    --col-w : calc(var(--bead-w) + clamp(6px, 1.4vw, 10px));
+    --beam-h: clamp(7px, 1.5vw, 11px);
+    --pad   : clamp(12px, 2.6vw, 20px);
+
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: clamp(4px, 1.2vw, 10px);
+    padding: var(--pad);
+    direction: ltr;
+    max-width: 100%;
+    border: var(--frame-bw) solid var(--frame-edge);
+    border-radius: var(--frame-radius);
+    background: var(--frame-bg);
+    box-shadow: var(--frame-shadow);
+    transition: border-radius .4s;
+  }
+
+  .col{
+    position: relative;
+    width: var(--col-w);
+    display: flex;
+    flex-direction: column;
+  }
+  .col::before{
+    content: "";
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 3px;
+    margin-left: -1.5px;
+    border-radius: 2px;
+    background: var(--rod);
+    z-index: 0;
+  }
+
+  .heaven{ position: relative; height: calc(var(--bead-h) + var(--travel)); }
+  .earth {
+    position: relative;
+    height: calc(var(--bead-h) * 4 + var(--travel));
+    margin-top: var(--beam-h);
+  }
+
+  /* ============ الخرزة ============ */
+  .bead{
+    --c: var(--bead-c);
+    position: absolute;
+    left: 50%;
+    width: var(--bead-w);
+    height: var(--bead-h);
+    margin-left: calc(var(--bead-w) / -2);
+    border-radius: var(--bead-radius);
+    z-index: 2;
+    background:
+      var(--shine),
+      linear-gradient(165deg,
+        color-mix(in srgb, var(--c) 45%, white) 0%,
+        var(--c) 40%,
+        color-mix(in srgb, var(--c) 55%, black) 100%);
+    box-shadow: var(--bead-shadow);
+    transition: top .3s cubic-bezier(.34, 1.5, .5, 1), opacity .3s;
+  }
+  .bead.h { --c: var(--heaven-c, var(--bead-c)); }
+  .bead.e0{ --c: var(--e0-c, var(--bead-c)); }
+  .bead.e1{ --c: var(--e1-c, var(--bead-c)); }
+  .bead.e2{ --c: var(--e2-c, var(--bead-c)); }
+  .bead.e3{ --c: var(--e3-c, var(--bead-c)); }
+
+  /* خرز ثنائي المخروط مع حافة وسطى (سمة ألوان المدرسة) */
+  :root[data-skin="kids"] .bead{
+    background:
+      var(--shine),
+      linear-gradient(180deg,
+        color-mix(in srgb, var(--c) 55%, white) 0%,
+        var(--c) 28%,
+        var(--c) 47%,
+        color-mix(in srgb, var(--c) 80%, black) 53%,
+        color-mix(in srgb, var(--c) 62%, black) 100%);
+  }
+
+  /* نيون: الخرز المحسوب يتوهج والباقي خافت */
+  :root[data-skin="neon"] .bead{
+    box-shadow:
+      0 0 10px var(--c),
+      0 0 22px color-mix(in srgb, var(--c) 50%, transparent),
+      inset 0 -3px 6px rgba(0,0,0,.4);
+  }
+  :root[data-skin="neon"] .bead:not(.on){
+    opacity: .28;
+    box-shadow: inset 0 -3px 6px rgba(0,0,0,.4);
+  }
+
+  /* بسيط: الخرز المحسوب فقط بلون مميز */
+  :root[data-skin="minimal"] .bead{
+    background: var(--c);
+  }
+  :root[data-skin="minimal"] .bead.on{ --c: var(--bead-on-c); }
+
+  /* ============ العارضة ============ */
+  .beam{
+    position: absolute;
+    left: 0; right: 0;
+    top: calc(var(--pad) + var(--bead-h) + var(--travel));
+    height: var(--beam-h);
+    border-radius: 2px;
+    background: var(--beam-bg);
+    box-shadow: var(--beam-shadow);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ============ نقاط الفصل ============ */
+  .gap{
+    position: relative;
+    width: clamp(6px, 1.6vw, 14px);
+    z-index: 4;
+  }
+  .gap::before,
+  .gap::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: clamp(4px, .9vw, 7px);
+    height: clamp(4px, .9vw, 7px);
+    margin-left: calc(clamp(4px, .9vw, 7px) / -2);
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: var(--dot-glow);
+  }
+  .gap::before{
+    top: calc(var(--bead-h) + var(--travel) + var(--beam-h)/2 - clamp(4px, .9vw, 7px) - 4px);
+  }
+  .gap::after{
+    top: calc(var(--bead-h) + var(--travel) + var(--beam-h)/2 + 4px);
+  }
+
+  .digital{
+    direction: ltr;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(12px, 2vw, 16px);
+    letter-spacing: .2em;
+    color: var(--digital);
+  }
+
+  /* ============ ملء الشاشة ============ */
+  .fs-btn{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px 12px calc(12px + env(safe-area-inset-left, 0px));
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transition: opacity .3s;
+  }
+  .fs-btn span{
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--ui-border);
+    background: var(--ui-bg);
+    color: var(--ui-text);
+    transition: border-color .2s;
+  }
+  .fs-btn svg{ width: 20px; height: 20px; display: block; }
+  .fs-btn .ic-exit{ display: none; }
+  .fs-btn:hover span{ border-color: var(--ui-active); }
+  .fs-btn:focus-visible{ outline: none; }
+  .fs-btn:focus-visible span{ outline: 2px solid var(--ui-active); outline-offset: 2px; }
+
+  :root[data-full] .fs-btn{ opacity: .3; }
+  :root[data-full] .fs-btn:hover,
+  :root[data-full] .fs-btn:focus-visible{ opacity: 1; }
+  :root[data-full] .fs-btn .ic-enter{ display: none; }
+  :root[data-full] .fs-btn .ic-exit{ display: block; }
+
+  /* في ملء الشاشة: تختفي العناوين والأزرار وتكبر الساعة لتملأ المساحة */
+  :root[data-full] .title,
+  :root[data-full] .skins{ display: none; }
+  :root[data-full] .frame{
+    --bead-w: min(8.6vw, 19vh);
+    --bead-h: calc(var(--bead-w) * .52);
+    --travel: calc(var(--bead-w) * .35);
+    --col-w : calc(var(--bead-w) * 1.2);
+    --beam-h: calc(var(--bead-w) * .24);
+    --pad   : calc(var(--bead-w) * .43);
+    gap: calc(var(--bead-w) * .18);
+  }
+  :root[data-full] .gap{ width: calc(var(--bead-w) * .3); }
+  :root[data-full] .digital{ font-size: clamp(14px, 2.4vw, 22px); }
+
+  @media (prefers-reduced-motion: reduce){
+    .bead{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    <h1 class="title">ساعة السوروبان</h1>
+    <div class="frame" id="soroban" aria-hidden="true"></div>
+    <div class="digital" id="digital">--:--:--</div>
+    <div class="skins" id="skins" role="radiogroup" aria-label="اختر سمة الساعة"></div>
+  </div>
+
+  <button type="button" class="fs-btn" id="fsBtn" aria-label="ملء الشاشة" title="ملء الشاشة">
+    <span>
+      <svg class="ic-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      <svg class="ic-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
+    </span>
+  </button>
+
+<script>
+(function () {
+  const root    = document.documentElement;
+  const frame   = document.getElementById('soroban');
+  const digital = document.getElementById('digital');
+  const skinsEl = document.getElementById('skins');
+  const rods    = [];
+
+  /* ---------- قائمة السمات ---------- */
+  const SKINS = [
+    { id: 'wood',    label: 'خشب كلاسيكي',  sw: ['#5b3316', '#df9a3a', '#ffc861'] },
+    { id: 'kids',    label: 'ألوان المدرسة', sw: ['#2f7de1', '#22b04c', '#ffd400', '#ff8a1a', '#ec2a23'] },
+    { id: 'ebony',   label: 'أبنوس وعاج',   sw: ['#120c0b', '#7a1d18', '#e6d8bc'] },
+    { id: 'neon',    label: 'نيون',          sw: ['#ff2bd6', '#00e5ff', '#1a0f3a'] },
+    { id: 'minimal', label: 'بسيط فاتح',    sw: ['#c9cfd6', '#1f6feb', '#22262b'] },
+    { id: 'jade',    label: 'يشم وذهب',     sw: ['#3d2615', '#2fa37a', '#e2c06e'] }
+  ];
+  const STORE_KEY = 'soroban-skin';
+
+  const buttons = SKINS.map(s => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'skin-btn';
+    b.setAttribute('role', 'radio');
+    b.dataset.skin = s.id;
+    const sw = document.createElement('span');
+    sw.className = 'swatch';
+    s.sw.forEach(c => {
+      const i = document.createElement('i');
+      i.style.background = c;
+      sw.appendChild(i);
+    });
+    const t = document.createElement('span');
+    t.textContent = s.label;
+    b.append(sw, t);
+    b.addEventListener('click', () => applySkin(s.id, true));
+    skinsEl.appendChild(b);
+    return b;
+  });
+
+  function applySkin(id, save) {
+    if (!SKINS.some(s => s.id === id)) id = 'wood';
+    root.dataset.skin = id;
+    buttons.forEach(b => {
+      const on = b.dataset.skin === id;
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+    });
+    if (save) { try { localStorage.setItem(STORE_KEY, id); } catch (e) {} }
+  }
+
+  // التنقل بالأسهم داخل مجموعة الأزرار
+  skinsEl.addEventListener('keydown', e => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const idx = SKINS.findIndex(s => s.id === root.dataset.skin);
+    const fwd = (e.key === 'ArrowLeft' || e.key === 'ArrowDown'); // RTL
+    const next = (idx + (fwd ? 1 : -1) + SKINS.length) % SKINS.length;
+    applySkin(SKINS[next].id, true);
+    buttons[next].focus();
+  });
+
+  // السمة الابتدائية: المحفوظة، وإلا حسب وضع العرض الفاتح أو الداكن
+  let initial = null;
+  try { initial = localStorage.getItem(STORE_KEY); } catch (e) {}
+  if (!initial) {
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    initial = prefersLight ? 'kids' : 'wood';
+  }
+  applySkin(initial, false);
+
+  /* ---------- بناء الأعمدة ---------- */
+  function makeRod() {
+    const col = document.createElement('div');
+    col.className = 'col';
+
+    const heaven = document.createElement('div');
+    heaven.className = 'heaven';
+    const hBead = document.createElement('div');
+    hBead.className = 'bead h';
+    hBead.style.top = '0px';
+    heaven.appendChild(hBead);
+
+    const earth = document.createElement('div');
+    earth.className = 'earth';
+    const eBeads = [];
+    for (let i = 0; i < 4; i++) {
+      const b = document.createElement('div');
+      b.className = 'bead e' + i;
+      b.style.top = `calc(var(--travel) + ${i} * var(--bead-h))`;
+      earth.appendChild(b);
+      eBeads.push(b);
+    }
+
+    col.append(heaven, earth);
+    rods.push({ hBead, eBeads });
+    return col;
+  }
+
+  function makeGap() {
+    const g = document.createElement('div');
+    g.className = 'gap';
+    return g;
+  }
+
+  ['rod', 'rod', 'gap', 'rod', 'rod', 'gap', 'rod', 'rod']
+    .forEach(type => frame.appendChild(type === 'gap' ? makeGap() : makeRod()));
+
+  const beam = document.createElement('div');
+  beam.className = 'beam';
+  frame.appendChild(beam);
+
+  /* ---------- ضبط رقم على عمود ---------- */
+  function setDigit(index, digit) {
+    const rod = rods[index];
+    const heavenOn = digit >= 5;
+    const earthOn  = digit % 5;
+
+    rod.hBead.style.top = heavenOn ? 'var(--travel)' : '0px';
+    rod.hBead.classList.toggle('on', heavenOn);
+
+    for (let i = 0; i < 4; i++) {
+      const on = i < earthOn;
+      rod.eBeads[i].style.top = on
+        ? `calc(${i} * var(--bead-h))`
+        : `calc(var(--travel) + ${i} * var(--bead-h))`;
+      rod.eBeads[i].classList.toggle('on', on);
+    }
+  }
+
+  function render() {
+    const now = new Date();
+    const p = n => String(n).padStart(2, '0');
+    const hh = p(now.getHours()), mm = p(now.getMinutes()), ss = p(now.getSeconds());
+    const s = hh + mm + ss;
+    for (let i = 0; i < 6; i++) setDigit(i, +s[i]);
+    digital.textContent = `${hh}:${mm}:${ss}`;
+  }
+
+  /* ---------- ملء الشاشة ---------- */
+  const fsBtn = document.getElementById('fsBtn');
+
+  function isFs() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+  }
+
+  function setFull(on) {
+    if (on) root.dataset.full = '';
+    else delete root.dataset.full;
+    const label = on ? 'الخروج من ملء الشاشة' : 'ملء الشاشة';
+    fsBtn.setAttribute('aria-label', label);
+    fsBtn.title = label;
+  }
+
+  fsBtn.addEventListener('click', async () => {
+    if ('full' in root.dataset) {
+      setFull(false);
+      if (isFs()) {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        try { await exit.call(document); } catch (e) {}
+      }
+    } else {
+      setFull(true);
+      const req = root.requestFullscreen || root.webkitRequestFullscreen;
+      // إن رفض المتصفح ملء الشاشة الحقيقي، يبقى العرض المكبّر داخل الصفحة
+      if (req) { try { await req.call(root, { navigationUI: 'hide' }); } catch (e) {} }
+    }
+  });
+
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev =>
+    document.addEventListener(ev, () => { if (!isFs()) setFull(false); })
+  );
+
+  // الرابط المنتهي بـ #full يفتح الساعة مكبّرة مباشرة (مفيد للخلفية الحيّة)
+  setFull(location.hash === '#full');
+
+  function loop() {
+    render();
+    setTimeout(loop, 1000 - new Date().getMilliseconds() + 10);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>
